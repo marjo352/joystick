@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<!--
+ The MIT License (MIT)
+
+ This file is part of the JoyStick Project (https://github.com/bobboteck/JoyStick).
+ Copyright (c) 2015 Roberto D'Amico (Bobboteck).
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+-->
+ <html>
+
+<head>
+	<title>Joy</title>
+	<meta charset="utf-8">
+	<meta name="description" content="Example page of use pure Javascript JoyStick">
+	<meta name="author" content="Roberto D'Amico">
+	<link rel="shortcut icon" type="image/png" href="http://bobboteck.github.io/img/roberto-damico-bobboteck.png">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<style>
+		body {
+			margin: 0px;
+			padding: 0px;
+			font-family: serif;
+		}
+
+
+		#joystick {
+			border: 1px solid black;
+		}
+	</style>
+	<script src="joy.js"></script>
+</head>
+
+<body>   
+
+
+
+	<!-- Example of two JoyStick integrated in the page structure -->
+
+	
+	 <div class="container mt-5 pt-3 pl-5 bg-info" style="width: 350px;height:500px;">
+		<h1>Joy Stick</h1>
+		<br> <span id="broker">Connecting......</span><br>
+		<div class="row">
+			<div class="columnLateral">
+				<div id="joy1Div"  onmousemove="move()"  style="width:200px;height:200px;margin:50px"></div>
+				Direction:<input id="joy1Direzione" type="text"  class="w-25"/><br />
+
+			</div>
+
+		</div>
+	</div>
+
+	<script src="browserMqtt.js"></script>
+    <script type="text/javascript">
+        // Create JoyStick object into the DIV 'joy1Div'
+
+        var Joy1 = new JoyStick('joy1Div');
+
+
+        var joy1Direzione = document.getElementById("joy1Direzione");
+
+// getting the diorection of the joy stick
+        setInterval(function () { joy1Direzione.value = Joy1.GetDir(); }, 50);
+// declaring fubction and calling the "mousemove" or kato ning wildcard nge gi declare sad sa python file para mo coonect sya sa microbit 
+        function move() {
+
+            console.log(joy1Direzione.value);
+            client.publish("mousemove", joy1Direzione.value);
+
+        }
+		// assigning connection to broker
+
+		var broker = 'wss://mqtt.eclipseprojects.io:443/mqtt'
+        var client = mqtt.connect(broker);
+
+        client.on('connect', () => {
+            document.getElementById('broker').innerHTML = "Connected to " + broker;
+		
+			console.log('Connected');
+
+        })
+
+
+
+    </script>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
